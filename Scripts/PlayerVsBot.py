@@ -11,7 +11,7 @@ class PlayerVsBot(tk.Frame):
         self.PAPER = 1
         self.SCISSORS = 2
         
-        self.background_image = tk.PhotoImage(file = '../Background/playervsbot_background.png')
+        self.background_image = tk.PhotoImage(file = '../Backgrounds/playervsbot_background.png')
         self.background = tk.Label(self, borderwidth=0, highlightthickness=0, image = self.background_image)
         self.background.place(x=0, y=0)
 

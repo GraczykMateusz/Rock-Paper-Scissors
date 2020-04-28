@@ -6,7 +6,7 @@ class PlayerVsPlayer(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
-        self.background_image = tk.PhotoImage(file = '../Background/hostclient_background.png')
+        self.background_image = tk.PhotoImage(file = '../Backgrounds/hostclient_background.png')
         self.background = tk.Label(self, borderwidth=0, highlightthickness=0, image = self.background_image)
         self.background.place(x=0, y=0)
 
