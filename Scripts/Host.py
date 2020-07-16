@@ -2,6 +2,8 @@ import _thread
 import time
 import socket
 
+from ConnectingHostPage import ConnectingHostPage
+
 class Host:
     @classmethod
     def connecting(cls):
@@ -36,8 +38,9 @@ class Host:
                     msg_decoded = msg.decode("utf-8")
                     if msg_decoded != "wait":
                         print(msg_decoded)
-                except:
-                    print("x")
+                        ConnectingHostPage._connected()
+                except Exception as e:
+                    print(e)
 
         try:
             _thread.start_new_thread(send, ("Thread-3", 4,))

@@ -2,6 +2,8 @@ import _thread
 import time
 import socket
 
+from ConnectingClientPage import ConnectingClientPage
+
 class Client:
     @classmethod
     def connecting(cls):
@@ -36,6 +38,8 @@ class Client:
                     msg_decoded = msg.decode("utf-8")
                     if msg_decoded != "wait":
                         print(msg_decoded)
+                        print("dupaaaa")
+                        ConnectingClientPage._connected()
                 except:
                     print("y")
 
