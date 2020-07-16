@@ -15,5 +15,5 @@ class Menu(tk.Frame):
         self.start_playervsbot_button.place(x=715, y=230)
 
         self.start_playervsplayer_button_image = tk.PhotoImage(file = '../Graphics/start_button.png')
-        self.start_playervsplayer_button = tk.Button(self, activebackground='black', image = self.start_playervsplayer_button_image, command=lambda: controller.show_frame("PlayerVsPlayer"))
+        self.start_playervsplayer_button = tk.Button(self, activebackground='black', image = self.start_playervsplayer_button_image, command=lambda: controller.show_frame("HostClientPage"))
         self.start_playervsplayer_button.place(x=715, y=438)

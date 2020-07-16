@@ -10,6 +10,9 @@ class PlayerVsBot(tk.Frame):
         self.ROCK = 0
         self.PAPER = 1
         self.SCISSORS = 2
+
+        self.player_move_label = None
+        self.bot_move_label = None
         
         self.background_image = tk.PhotoImage(file = '../Backgrounds/playervsbot_background.png')
         self.background = tk.Label(self, borderwidth=0, highlightthickness=0, image = self.background_image)
@@ -42,6 +45,10 @@ class PlayerVsBot(tk.Frame):
         self.load_comments()
 
     def player_makes_move(self, player_move):
+        if (self.player_move_label and self.bot_move_label) is not None:
+            self.player_move_label.destroy()
+            self.bot_move_label.destroy()
+        
         bot_move = self.bot_makes_move()
 
         self.set_move_labels(player_move, bot_move)
@@ -112,7 +119,7 @@ class PlayerVsBot(tk.Frame):
 
                 if bot_move == self.ROCK:
                     self.bot_move_label = tk.Label(self, text="BOT", bg='#28b4e5', fg='#b526ae',font=('DejaVu Serif', 15))
-                    self.bot_move_label.place(x=205, y=150)
+                    self.bot_move_label.place(x=218, y=150)
 
                 elif bot_move == self.SCISSORS:
                     self.bot_move_label = tk.Label(self, text="BOT", bg='#28b4e5', fg='#b526ae',font=('DejaVu Serif', 15))
@@ -124,7 +131,7 @@ class PlayerVsBot(tk.Frame):
 
                 if bot_move == self.ROCK:
                     self.bot_move_label = tk.Label(self, text="BOT", bg='#28b4e5', fg='#b526ae',font=('DejaVu Serif', 15))
-                    self.bot_move_label.place(x=205, y=150)
+                    self.bot_move_label.place(x=218, y=150)
 
                 elif bot_move == self.PAPER:
                     self.bot_move_label = tk.Label(self, text="BOT", bg='#28b4e5', fg='#b526ae',font=('DejaVu Serif', 15))
@@ -167,7 +174,7 @@ class PlayerVsBot(tk.Frame):
 
         for i in range(0, COMMENTS_COUNT):
 
-            path_to_image = '../Graphics/Comments/comment' + str(i) + '.png'
+            path_to_image = f'../Graphics/Comments/comment{i}.png'
             self.comments_images.append(tk.PhotoImage(file = path_to_image))
             comment = tk.Label(self, borderwidth=0, highlightthickness=0, image = self.comments_images[i])
 

@@ -1,12 +1,12 @@
-'''import tkinter as tk
+import tkinter as tk
 
-class PlayerVsPlayer(tk.Frame):
+class ConnectingPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
-        self.background_image = tk.PhotoImage(file = '../Backgrounds/hostclient_background.png')
+        self.background_image = tk.PhotoImage(file = '../Backgrounds/connecting_background.png')
         self.background = tk.Label(self, borderwidth=0, highlightthickness=0, image = self.background_image)
         self.background.place(x=0, y=0)
 
@@ -15,9 +15,9 @@ class PlayerVsPlayer(tk.Frame):
         self.back_button.place(x=1000, y=600)
 
         self.host_image = tk.PhotoImage(file = '../Graphics/host.png')
-        self.host = tk.Button(self, activebackground='black', image = self.host_image, command=lambda: controller.show_frame("Menu"))
+        self.host = tk.Button(self, activebackground='black', image = self.host_image, command=lambda: controller.show_frame("PlayerVsPlayerHost"))
         self.host.place(x=268, y=180)
 
         self.client_image = tk.PhotoImage(file = '../Graphics/client.png')
-        self.client = tk.Button(self, activebackground='black', image = self.client_image, command=lambda: controller.show_frame("Menu"))
-        self.client.place(x=630, y=180)'''
+        self.client = tk.Button(self, activebackground='black', image = self.client_image, command=lambda: controller.show_frame("PlayerVsPlayerClient"))
+        self.client.place(x=630, y=180)
