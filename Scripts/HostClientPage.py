@@ -1,5 +1,8 @@
 import tkinter as tk
 
+from Client import Client
+from Host import Host
+
 class HostClientPage(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -15,9 +18,9 @@ class HostClientPage(tk.Frame):
         self.back_button.place(x=1000, y=600)
 
         self.host_image = tk.PhotoImage(file = '../Graphics/host.png')
-        self.host = tk.Button(self, activebackground='black', image = self.host_image, command=lambda: controller.show_frame("PlayerVsPlayerHost"))
+        self.host = tk.Button(self, activebackground='black', image = self.host_image, command=lambda: [controller.show_frame("ConnectingHostPage"), Client.connecting()])
         self.host.place(x=268, y=180)
 
         self.client_image = tk.PhotoImage(file = '../Graphics/client.png')
-        self.client = tk.Button(self, activebackground='black', image = self.client_image, command=lambda: controller.show_frame("PlayerVsPlayerClient"))
+        self.client = tk.Button(self, activebackground='black', image = self.client_image, command=lambda: [controller.show_frame("ConnectingClientPage"), Host.connecting()])
         self.client.place(x=630, y=180)

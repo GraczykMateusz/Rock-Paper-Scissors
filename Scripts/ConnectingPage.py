@@ -1,8 +1,8 @@
 import tkinter as tk
+from abc import ABC, abstractmethod
 
-class ConnectingPage(tk.Frame):
-
-    def __init__(self, parent, controller):
+class ConnectingPage(tk.Frame, ABC):
+    def _config(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
@@ -11,13 +11,10 @@ class ConnectingPage(tk.Frame):
         self.background.place(x=0, y=0)
 
         self.back_button_image = tk.PhotoImage(file = '../Graphics/back_button.png')
-        self.back_button = tk.Button(self, activebackground='black', image = self.back_button_image, command=lambda: controller.show_frame("Menu"))
+        self.back_button = tk.Button(self, activebackground='black', image = self.back_button_image, command=lambda: controller.show_frame("HostClientPage"))
         self.back_button.place(x=1000, y=600)
 
-        self.host_image = tk.PhotoImage(file = '../Graphics/host.png')
-        self.host = tk.Button(self, activebackground='black', image = self.host_image, command=lambda: controller.show_frame("PlayerVsPlayerHost"))
-        self.host.place(x=268, y=180)
-
-        self.client_image = tk.PhotoImage(file = '../Graphics/client.png')
-        self.client = tk.Button(self, activebackground='black', image = self.client_image, command=lambda: controller.show_frame("PlayerVsPlayerClient"))
-        self.client.place(x=630, y=180)
+    @abstractmethod
+    def _connected(self):
+        pass
+        
