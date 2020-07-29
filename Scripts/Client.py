@@ -1,6 +1,7 @@
-import _thread
+import threading
 import time
 import socket
+import sys
 
 from ConnectingClientPage import ConnectingClientPage
 
@@ -8,6 +9,9 @@ class Client:
     
     socket_connection = None
     cs = None
+
+    t1 = None
+    t2 = None
 
     @classmethod
     def connecting(cls):
@@ -21,24 +25,28 @@ class Client:
             cls.socket_connection.close()
 
         try:
-            _thread.start_new_thread(cls.try_connect, ("Thread-1", 4,))
-            _thread.start_new_thread(cls.receiv, ("Thread-2", 4,))
+            cls.t1 = threading.Thread(target=cls.try_connect, daemon=True)
+            cls.t2 = threading.Thread(target=cls.receiv, daemon=True)
+            cls.t1.start()
+            cls.t2.start()
         except:
             print("Error: unable to start thread")
     
     @classmethod
-    def try_connect(cls, threadName, delay):
-        is_connected = "connected"
+    def try_connect(cls):
+        is_connected = False
+        connection_msg = "CONNECTION"
         
-        while True:
+        while is_connected is False:
             try:
                 cls.cs, address = cls.socket_connection.accept()
-                cls.cs.send(bytes(is_connected.encode("utf-8")))
+                cls.cs.send(bytes(connection_msg.encode("utf-8")))
+                is_connected = True
             except:
                 pass
     
     @classmethod
-    def receiv(cls, threadName, delay):
+    def receiv(cls):
         is_connected = False
         
         while is_connected is False:
@@ -49,17 +57,15 @@ class Client:
                 msg = receiv_socket.recv(10)
                 msg_decoded = msg.decode("utf-8")
 
-                if msg_decoded == "connected":
+                if msg_decoded == "CONNECTION":
                     ConnectingClientPage._connected()
                     is_connected = True
-
-            except Exception as err:
-                print(err)
+            except:
+                pass
 
         while True:
             try:
-                pass
-                    
+                pass       
             except Exception as err:
                 print(err)
 
