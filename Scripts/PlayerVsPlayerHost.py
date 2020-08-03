@@ -49,7 +49,15 @@ class PlayerVsPlayerHost(tk.Frame):
         self.player2_score_label.place(x=770, y=580)
 
     def host_makes_move(self, host_move):
-        self.host_move = host_move             
+        self.host_move = host_move
+
+        if host_move == "0":
+            Host.send_rock()
+        elif host_move == "1":
+            Host.send_paper()
+        elif host_move == "2":
+            Host.send_scissors()
+
         self.set_move_labels()
 
     def set_move_labels(self):

@@ -1,4 +1,5 @@
 import tkinter as tk
+import threading
 
 from Client import Client
 
@@ -8,9 +9,16 @@ class PlayerVsPlayerClient(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
-        self.ROCK = 0
-        self.PAPER = 1
-        self.SCISSORS = 2
+        self.ROCK = "0"
+        self.PAPER = "1"
+        self.SCISSORS = "2"
+
+        self.host_move_label = None
+        self.client_move_label = None
+
+        self.client_move = None
+
+        self.t3 = None
 
         self.background_image = tk.PhotoImage(file = '../Backgrounds/playervsplayer2_background.png')
         self.background = tk.Label(self, borderwidth=0, highlightthickness=0, image = self.background_image)
@@ -40,10 +48,107 @@ class PlayerVsPlayerClient(tk.Frame):
         self.player2_score_label = tk.Label(self, text=self.player2_score, bg='#28b4e5', fg='#023661', font=('DejaVu Serif', 38))
         self.player2_score_label.place(x=770, y=580)
 
-    def client_makes_move(self, host_move): 
-        if host_move == 0:
+    def client_makes_move(self, client_move): 
+        self.client_move = client_move
+
+        if client_move == "0":
             Client.send_rock()
-        elif host_move == 1:
+        elif client_move == "1":
             Client.send_paper()
-        elif host_move == 2:
+        elif client_move == "2":
             Client.send_scissors()
+
+        self.set_move_labels()
+
+    def set_move_labels(self):
+        if (self.host_move_label and self.client_move_label) is not None:
+            self.host_move_label.destroy()
+            self.client_move_label.destroy()
+
+        if Client.msg_decoded is not None:
+            self.check_winner(self.client_move, Client.msg_decoded)
+            Client.msg_decoded = None
+            self.client_move = None
+
+            self.after(2000, self.host_move_label.destroy)
+            self.after(2000, self.client_move_label.destroy)
+        else:
+            if self.t3 is None:
+                self.t3 = threading.Thread(target=self.wait_for_host_move, daemon=True)
+                self.t3.start()
+
+    def wait_for_host_move(self):
+        while True:
+            client_move = self.client_move
+            host_move = Client.msg_decoded
+            
+            if host_move is not None:
+                self.check_winner(client_move, host_move)
+                Client.msg_decoded = None
+                self.client_move = None
+                self.t3 = None
+
+                self.after(2000, self.host_move_label.destroy)
+                self.after(2000, self.client_move_label.destroy)
+
+                break
+
+    def check_winner(self, client_move, host_move):
+        if host_move == client_move:
+            
+            if (host_move or client_move) == self.ROCK:
+                self.host_move_label = tk.Label(self, text="PLAYER 1", bg='#28b4e5', fg='#023661', font=('DejaVu Serif', 15))
+                self.client_move_label = tk.Label(self, text="/PLAYER 2", bg='#28b4e5', fg='#b526ae',font=('DejaVu Serif', 15))
+
+                self.host_move_label.place(x=160, y=150)
+                self.client_move_label.place(x=260, y=150)
+
+            elif (host_move or client_move) == self.PAPER:
+                self.host_move_label = tk.Label(self, text="PLAYER 1", bg='#28b4e5', fg='#023661', font=('DejaVu Serif', 15))
+                self.client_move_label = tk.Label(self, text="/PLAYER 2", bg='#28b4e5', fg='#b526ae',font=('DejaVu Serif', 15))
+
+                self.host_move_label.place(x=462, y=150)
+                self.client_move_label.place(x=562, y=150)
+
+            elif (host_move or client_move) == self.SCISSORS:
+                self.host_move_label = tk.Label(self, text="PLAYER 1", bg='#28b4e5', fg='#023661', font=('DejaVu Serif', 15))
+                self.client_move_label = tk.Label(self, text="/PLAYER 2", bg='#28b4e5', fg='#b526ae',font=('DejaVu Serif', 15))
+
+                self.host_move_label.place(x=764, y=150)
+                self.client_move_label.place(x=864, y=150)
+        else:
+            if host_move == self.ROCK:
+                self.host_move_label = tk.Label(self, text="PLAYER 1", bg='#28b4e5', fg='#023661', font=('DejaVu Serif', 15))
+                self.host_move_label.place(x=205, y=150)
+
+                if client_move == self.PAPER:
+                    self.client_move_label = tk.Label(self, text="PLAYER 2", bg='#28b4e5', fg='#b526ae',font=('DejaVu Serif', 15))
+                    self.client_move_label.place(x=523, y=150)
+
+                elif client_move == self.SCISSORS:
+                    self.client_move_label = tk.Label(self, text="PLAYER 2", bg='#28b4e5', fg='#b526ae',font=('DejaVu Serif', 15))
+                    self.client_move_label.place(x=825, y=150)
+
+            elif host_move == self.PAPER:
+                self.host_move_label = tk.Label(self, text="PLAYER 1", bg='#28b4e5', fg='#023661', font=('DejaVu Serif', 15))
+                self.host_move_label.place(x=503, y=150)
+
+                if client_move == self.ROCK:
+                    self.client_move_label = tk.Label(self, text="PLAYER 2", bg='#28b4e5', fg='#b526ae',font=('DejaVu Serif', 15))
+                    self.client_move_label.place(x=218, y=150)
+
+                elif client_move == self.SCISSORS:
+                    self.client_move_label = tk.Label(self, text="PLAYER 2", bg='#28b4e5', fg='#b526ae',font=('DejaVu Serif', 15))
+                    self.client_move_label.place(x=825, y=150)
+
+            elif host_move == self.SCISSORS:
+                self.host_move_label = tk.Label(self, text="PLAYER 1", bg='#28b4e5', fg='#023661', font=('DejaVu Serif', 15))
+                self.host_move_label.place(x=803, y=150)
+
+                if client_move == self.ROCK:
+                    self.client_move_label = tk.Label(self, text="PLAYER 2", bg='#28b4e5', fg='#b526ae',font=('DejaVu Serif', 15))
+                    self.client_move_label.place(x=218, y=150)
+
+                elif client_move == self.PAPER:
+                    self.client_move_label = tk.Label(self, text="PLAYER 2", bg='#28b4e5', fg='#b526ae',font=('DejaVu Serif', 15))
+                    self.client_move_label.place(x=523, y=150)

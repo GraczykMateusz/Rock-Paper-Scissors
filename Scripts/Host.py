@@ -71,16 +71,34 @@ class Host:
                 msg = receiv_socket.recv(10)
                 cls.msg_decoded = msg.decode("utf-8")
 
-                if cls.msg_decoded == "ROCK":
+                if cls.msg_decoded == "0":
                     print(cls.msg_decoded)
-                elif cls.msg_decoded == "PAPER":
+                elif cls.msg_decoded == "1":
                     print(cls.msg_decoded)
-                elif cls.msg_decoded == "SCISSORS":
+                elif cls.msg_decoded == "2":
                     print(cls.msg_decoded)
             except Exception as err:
                 print(err)
 
+    @classmethod
+    def send(cls, msg):    
+        try:
+            cls.cs, address = cls.socket_connection.accept()
+            cls.cs.send(bytes(msg.encode("utf-8")))
+        except:
+            pass
 
+    @classmethod
+    def send_rock(cls):
+        cls.send("0")
+
+    @classmethod
+    def send_paper(cls):
+        cls.send("1")
+
+    @classmethod
+    def send_scissors(cls):
+        cls.send("2")
 
     @classmethod
     def lose_connection(cls):

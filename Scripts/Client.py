@@ -10,6 +10,8 @@ class Client:
     socket_connection = None
     cs = None
 
+    msg_decoded = None
+
     t1 = None
     t2 = None
 
@@ -69,14 +71,14 @@ class Client:
                 receiv_socket.connect((socket.gethostname(), 50000))
                 
                 msg = receiv_socket.recv(10)
-                msg_decoded = msg.decode("utf-8")
+                cls.msg_decoded = msg.decode("utf-8")
 
-                if msg_decoded == "CLIENT":
-                    pass
-                elif msg_decoded == "HOST":
-                    pass
-                elif msg_decoded == "DRAW":
-                    pass      
+                if cls.msg_decoded == "0":
+                    print(cls.msg_decoded)
+                elif cls.msg_decoded == "1":
+                    print(cls.msg_decoded)
+                elif cls.msg_decoded == "2":
+                    print(cls.msg_decoded)      
             except Exception as err:
                 print(err)
 
