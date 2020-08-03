@@ -58,15 +58,26 @@ class PlayerVsPlayerClient(tk.Frame):
         elif client_move == "2":
             Client.send_scissors()
 
-        self.set_move_labels()
+        self.check_host_move()
 
-    def set_move_labels(self):
+    def check_host_move(self):
         if (self.host_move_label and self.client_move_label) is not None:
             self.host_move_label.destroy()
             self.client_move_label.destroy()
 
         if Client.msg_decoded is not None:
-            self.check_winner(self.client_move, Client.msg_decoded)
+            self.set_move_labels(self.client_move, Client.msg_decoded)
+
+            winner = self.who_win(self.client_move, Client.msg_decoded)
+
+            if winner == 'PLAYER1':
+                self.player1_score += 1
+
+            if winner == 'PLAYER2':
+                self.player2_score += 1
+
+            self.refresh_score()
+
             Client.msg_decoded = None
             self.client_move = None
 
@@ -83,7 +94,18 @@ class PlayerVsPlayerClient(tk.Frame):
             host_move = Client.msg_decoded
             
             if host_move is not None:
-                self.check_winner(client_move, host_move)
+                self.set_move_labels(client_move, host_move)
+
+                winner = self.who_win(client_move, host_move)
+
+                if winner == 'PLAYER1':
+                    self.player1_score += 1
+
+                if winner == 'PLAYER2':
+                    self.player2_score += 1
+
+                self.refresh_score()
+
                 Client.msg_decoded = None
                 self.client_move = None
                 self.t3 = None
@@ -93,7 +115,36 @@ class PlayerVsPlayerClient(tk.Frame):
 
                 break
 
-    def check_winner(self, client_move, host_move):
+    def refresh_score(self):
+        self.player1_score_label = tk.Label(self, text=self.player1_score, bg='#28b4e5', fg='#023661', font=('DejaVu Serif', 38))
+        self.player1_score_label.place(x=770, y=505)
+
+        self.player2 = tk.Label(self, text=self.player2_score, bg='#28b4e5', fg='#023661', font=('DejaVu Serif', 38))
+        self.player2.place(x=770, y=580)
+
+    def who_win(self, player1_move, player2_move):
+        
+        '''
+                            ----------------------------------------------
+                            |               HOW WINS TABLE               |
+        ------------------------------------------------------------------
+        | Player1 / Player2 |    Rock[0]   |    Paper[1]  |  Scissors[2] |   
+        |-------------------|--------------|--------------|--------------|
+        |        Rock[0]    |     DRAW     |    PLAYER1   |    PLAYER2   |
+        |-------------------|--------------|--------------|--------------|
+        |       Paper[1]    |    PLAYER2   |     DRAW     |    PLAYER1   |
+        |-------------------|--------------|--------------|--------------|
+        |    Scissors[2]    |    PLAYER1   |    PLAYER2   |     DRAW     |
+        ------------------------------------------------------------------
+        '''
+
+        win_arr = [['DRAW',    'PLAYER1', 'PLAYER2'],
+                   ['PLAYER2', 'DRAW',    'PLAYER1'],
+                   ['PLAYER1', 'PLAYER2', 'DRAW'   ]]
+
+        return win_arr[int(player1_move)][int(player2_move)]
+
+    def set_move_labels(self, client_move, host_move):
         if host_move == client_move:
             
             if (host_move or client_move) == self.ROCK:
