@@ -1,7 +1,6 @@
 import threading
 import time
 import socket
-import sys
 
 from ConnectingHostPage import ConnectingHostPage
 
@@ -9,6 +8,8 @@ class Host:
 
     socket_connection = None
     cs = None
+
+    msg_decoded = None
 
     t1 = None
     t2 = None
@@ -68,16 +69,18 @@ class Host:
                 receiv_socket.connect((socket.gethostname(), 45000))
                 
                 msg = receiv_socket.recv(10)
-                msg_decoded = msg.decode("utf-8")
+                cls.msg_decoded = msg.decode("utf-8")
 
-                if msg_decoded == "ROCK":
-                    print(msg_decoded)
-                elif msg_decoded == "PAPER":
-                    print(msg_decoded)
-                elif msg_decoded == "SCISSORS":
-                    print(msg_decoded)
+                if cls.msg_decoded == "ROCK":
+                    print(cls.msg_decoded)
+                elif cls.msg_decoded == "PAPER":
+                    print(cls.msg_decoded)
+                elif cls.msg_decoded == "SCISSORS":
+                    print(cls.msg_decoded)
             except Exception as err:
                 print(err)
+
+
 
     @classmethod
     def lose_connection(cls):

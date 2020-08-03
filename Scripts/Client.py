@@ -65,7 +65,18 @@ class Client:
 
         while True:
             try:
-                pass       
+                receiv_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                receiv_socket.connect((socket.gethostname(), 50000))
+                
+                msg = receiv_socket.recv(10)
+                msg_decoded = msg.decode("utf-8")
+
+                if msg_decoded == "CLIENT":
+                    pass
+                elif msg_decoded == "HOST":
+                    pass
+                elif msg_decoded == "DRAW":
+                    pass      
             except Exception as err:
                 print(err)
 
@@ -79,12 +90,12 @@ class Client:
 
     @classmethod
     def send_rock(cls):
-        cls.send("ROCK")
+        cls.send("0")
 
     @classmethod
     def send_paper(cls):
-        cls.send("PAPER")
+        cls.send("1")
     
     @classmethod
     def send_scissors(cls):
-        cls.send("SCISSORS")
+        cls.send("2")
